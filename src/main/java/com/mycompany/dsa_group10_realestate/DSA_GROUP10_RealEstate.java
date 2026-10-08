@@ -11,6 +11,5 @@ package com.mycompany.dsa_group10_realestate;
 public class DSA_GROUP10_RealEstate {
 
     public static void main(String[] args) {
-        System.out.println("Hello World!");
     }
 }
