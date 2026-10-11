@@ -5,7 +5,8 @@
 package gui;
 
 
-
+import gui.ReportControls;
+import gui.TransactionPanel;
 import java.awt.Color;
 import javax.swing.*;
 
@@ -23,11 +24,10 @@ public class MainFrame extends JFrame {
     private JLabel hdrRealEstatePro;
     private JPanel pnlHeader;
     
+    TransactionPanel transactionPanel = new TransactionPanel();
+    //ReportControls rcontrols = new ReportControls();
             
     public MainFrame() {
-        
-        TransactionPanel transactionPanel = new TransactionPanel();
-        
         setTitle("Real state Management System");
         setSize(1000, 600);
         setLayout(null);
@@ -62,7 +62,15 @@ public class MainFrame extends JFrame {
         pnlHeader.add(btnProperties);
         
         add(transactionPanel);
-    }
+        //add(rcontrols);
+        
     }
 
     
+    
+    public static void main(String[] args) {
+        MainFrame app = new MainFrame();
+        app.setVisible(true);
+        
+    }
+}
