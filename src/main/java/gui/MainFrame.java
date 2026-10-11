@@ -4,7 +4,7 @@
 
 package gui;
 
-
+import gui.propertiesGUI;
 import gui.ReportControls;
 import gui.TransactionPanel;
 import java.awt.Color;
