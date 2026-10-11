@@ -7,7 +7,7 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import javax.swing.*;
 
-public class ReportControls extends JFrame {
+public class ReportControls extends JPanel {
 
     private JComboBox<String> sortingComboBox;
     private JButton generateReportButton;
@@ -19,13 +19,10 @@ public class ReportControls extends JFrame {
         // WINDOW
         // ==========================================
 
-        setTitle("Real Estate Management System");
-
-        setSize(1080, 700);
-
-        setLocationRelativeTo(null);
-
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        setTitle("Real Estate Management System");
+//        setSize(1080, 700);
+//        setLocationRelativeTo(null);
+//        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // ==========================================
         // MAIN PANEL
@@ -345,12 +342,5 @@ public class ReportControls extends JFrame {
     // MAIN
     // ==============================================
 
-    public static void main(String[] args) {
-
-        java.awt.EventQueue.invokeLater(() -> {
-
-            new ReportControls().setVisible(true);
-
-        });
+    
     }
-}
