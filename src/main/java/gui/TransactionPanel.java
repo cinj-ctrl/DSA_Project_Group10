@@ -5,24 +5,33 @@
 package gui;
 
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author GRRD
  */
-public class TransactionPanel extends JPanel{
+public class TransactionPanel extends JPanel implements ActionListener{
 
     private JPanel pnlLogTransac, pnlTransacHistory;
     private JLabel lblLogTransac, lblTransacID, lblPropertyID, lblClientID, lblDate, lblTransacHistory;
     private JTextField txfTransacID, txfPropertyID, txfClientID, txfDate;
     private JButton btnLogTransac;
+    private DefaultTableModel tableModel;
     private JTable tblTransacHistory;
+    private JScrollPane scrollPane;
     
     public TransactionPanel() {
         
         setBounds(0,0,1000,600);
         setLayout(null);
+        
+        String[] columnNames= {"Transaction ID","Property ID","Client ID","Date"};
+        
+        tableModel = new DefaultTableModel(columnNames,0);
         
         //PANELS
         //Left Panel
@@ -91,12 +100,52 @@ public class TransactionPanel extends JPanel{
         pnlTransacHistory.add(lblTransacHistory);
         
         //Right Panel Table
-        tblTransacHistory = new JTable();
-        tblTransacHistory.setBounds(10,35,580,400);
-        pnlTransacHistory.add(tblTransacHistory);
+        tblTransacHistory = new JTable(tableModel);
+        scrollPane = new JScrollPane(tblTransacHistory);
         
+            //disables editing
+        tblTransacHistory.setEnabled(false);
         
+            //Disables reordering of columns (idk why enabled yan by default)
+        tblTransacHistory.getTableHeader().setReorderingAllowed(false);
+            //Disables resizing of columns
+        tblTransacHistory.getTableHeader().setResizingAllowed(false);
         
+            //Bounds and add table to panels
+        scrollPane.setBounds(10,35,580,400);
+        pnlTransacHistory.add(scrollPane);
+        
+        btnLogTransac.addActionListener(this);
+        
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if(e.getSource() == btnLogTransac){
+            
+            String transacID = txfTransacID.getText().trim();
+            String propertyID = txfPropertyID.getText().trim();
+            String clientID = txfClientID.getText().trim();
+            String date = txfDate.getText().trim();
+            
+            if (!transacID.isEmpty() && !propertyID.isEmpty() && !clientID.isEmpty() && !date.isEmpty()){
+                
+                //Gets string from text fields and adds them to row object
+                Object[] row = {transacID, propertyID, clientID, date};
+                
+                //Adds data to DefaultTableModel to be displayed in frontend
+                tableModel.addRow(row);
+                
+                //Clears textFields
+                txfTransacID.setText("");
+                txfPropertyID.setText("");
+                txfClientID.setText("");
+                txfDate.setText("");
+                
+            }else{
+                JOptionPane.showMessageDialog(this, "Please complete all fields", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }
     
     
