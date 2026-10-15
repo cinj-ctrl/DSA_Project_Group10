@@ -7,6 +7,8 @@ package gui;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
+import java.util.LinkedList;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
@@ -15,23 +17,35 @@ import javax.swing.table.DefaultTableModel;
  * @author GRRD
  */
 public class TransactionPanel extends JPanel implements ActionListener{
-
+    
+    //GUI components
     private JPanel pnlLogTransac, pnlTransacHistory;
     private JLabel lblLogTransac, lblTransacID, lblPropertyID, lblClientID, lblDate, lblTransacHistory;
     private JTextField txfTransacID, txfPropertyID, txfClientID, txfDate;
     private JButton btnLogTransac;
+    
+    //All three are important for showing frontend data
     private DefaultTableModel tableModel;
     private JTable tblTransacHistory;
     private JScrollPane scrollPane;
     
+    //Backend data to be used in database
+    private LinkedList<Object> linkedlist;
+    
+    //Name for table column
+    private String[] columnNames= {"Transaction ID","Property ID","Client ID","Date"};
+    
     public TransactionPanel() {
         
+        //Sets bounds as main frame bounds
         setBounds(0,0,1000,600);
         setLayout(null);
         
-        String[] columnNames= {"Transaction ID","Property ID","Client ID","Date"};
-        
+        //Table model to be displayed to user via scrollPane
         tableModel = new DefaultTableModel(columnNames,0);
+        
+        //Initializes linked list object
+        linkedlist = new LinkedList();
         
         //PANELS
         //Left Panel
@@ -115,6 +129,7 @@ public class TransactionPanel extends JPanel implements ActionListener{
         scrollPane.setBounds(0, 50,560,383);
         pnlTransacHistory.add(scrollPane);
         
+        //Adds action listener to button
         btnLogTransac.addActionListener(this);
         
     }
@@ -123,11 +138,13 @@ public class TransactionPanel extends JPanel implements ActionListener{
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == btnLogTransac){
             
+            //Gets value from text fields and turn them into strings
             String transacID = txfTransacID.getText().trim();
             String propertyID = txfPropertyID.getText().trim();
             String clientID = txfClientID.getText().trim();
             String date = txfDate.getText().trim();
             
+            //If all the text fields have text then do this:
             if (!transacID.isEmpty() && !propertyID.isEmpty() && !clientID.isEmpty() && !date.isEmpty()){
                 
                 //Gets string from text fields and adds them to row object
@@ -136,17 +153,27 @@ public class TransactionPanel extends JPanel implements ActionListener{
                 //Adds data to DefaultTableModel to be displayed in frontend
                 tableModel.addRow(row);
                 
+                //Adds data to LinkedList to be stores in backend
+                linkedlist.add(Arrays.toString(row));
+                
                 //Clears textFields
                 txfTransacID.setText("");
                 txfPropertyID.setText("");
                 txfClientID.setText("");
                 txfDate.setText("");
                 
-            }else{
+                //Check linked list value FOR DEBUGGING
+                    //System.out.println(linkedlist);
+                
+            }
+            //If at least ONE text field is empty: display error message:
+            else{
                 JOptionPane.showMessageDialog(this, "Please complete all fields", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
+    
+    
     
     
 }
