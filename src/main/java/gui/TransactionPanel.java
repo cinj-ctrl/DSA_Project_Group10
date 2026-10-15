@@ -37,7 +37,7 @@ public class TransactionPanel extends JPanel implements ActionListener{
         //Left Panel
         pnlLogTransac = new JPanel();
         pnlLogTransac.setLayout(null);
-        pnlLogTransac.setBounds(10,75,300,450);
+        pnlLogTransac.setBounds(5, 60, 400, 480);
         pnlLogTransac.setBackground(Color.white);
         pnlLogTransac.setVisible(true);
         add(pnlLogTransac);
@@ -45,7 +45,7 @@ public class TransactionPanel extends JPanel implements ActionListener{
         //Right Panel
         pnlTransacHistory = new JPanel();
         pnlTransacHistory.setLayout(null);
-        pnlTransacHistory.setBounds(335,75,600,450);
+        pnlTransacHistory.setBounds(420, 60, 560, 480);
         pnlTransacHistory.setBackground(Color.white);
         pnlTransacHistory.setVisible(true);
         add(pnlTransacHistory);
@@ -53,50 +53,50 @@ public class TransactionPanel extends JPanel implements ActionListener{
         //COMPONENTS
         //Left Panel Labels
         lblLogTransac = new JLabel("Log Transaction");
-        lblLogTransac.setBounds(10,0,100,25);
+        lblLogTransac.setBounds(5, 5, 100, 50);
         pnlLogTransac.add(lblLogTransac);
         
         lblTransacID = new JLabel("Transaction ID:");
-        lblTransacID.setBounds(10,150,100,25);
+        lblTransacID.setBounds(20, 100, 100, 50);
         pnlLogTransac.add(lblTransacID);
         
         lblPropertyID = new JLabel("Property ID:");
-        lblPropertyID.setBounds(10,200,100,25);
+        lblPropertyID.setBounds(20, 150, 100, 50);
         pnlLogTransac.add(lblPropertyID);
         
         lblClientID = new JLabel("Client ID:");
-        lblClientID.setBounds(10,250,100,25);
+        lblClientID.setBounds(20, 200, 100, 50);
         pnlLogTransac.add(lblClientID);
         
         lblDate = new JLabel("Date (YYYY-MM-DD):");
-        lblDate.setBounds(10,300,150,25);
+        lblDate.setBounds(20, 250, 150, 50);
         pnlLogTransac.add(lblDate);
         
         //Left Panel Text Fields
         txfTransacID = new JTextField();
-        txfTransacID.setBounds(150,150,125,25);
+        txfTransacID.setBounds(170, 115, 200, 20);
         pnlLogTransac.add(txfTransacID);
         
         txfPropertyID = new JTextField();
-        txfPropertyID.setBounds(150,200,125,25);
+        txfPropertyID.setBounds(170, 165, 200, 20);
         pnlLogTransac.add(txfPropertyID);
         
         txfClientID = new JTextField();
-        txfClientID.setBounds(150,250,125,25);
+        txfClientID.setBounds(170, 215, 200, 20);
         pnlLogTransac.add(txfClientID);
         
         txfDate = new JTextField();
-        txfDate.setBounds(150,300,125,25);
+        txfDate.setBounds(170, 265, 200, 20);
         pnlLogTransac.add(txfDate);
         
         //Left Panel Button
         btnLogTransac = new JButton("Log Transaction");
-        btnLogTransac.setBounds(10,350,265,25);
+        btnLogTransac.setBounds(50, 330, 280, 30);
         pnlLogTransac.add(btnLogTransac);
         
         //Right Panel Label
         lblTransacHistory = new JLabel("Transaction History");
-        lblTransacHistory.setBounds(10,0,150,25);
+        lblTransacHistory.setBounds(5, 5, 150, 50);
         pnlTransacHistory.add(lblTransacHistory);
         
         //Right Panel Table
@@ -112,7 +112,7 @@ public class TransactionPanel extends JPanel implements ActionListener{
         tblTransacHistory.getTableHeader().setResizingAllowed(false);
         
             //Bounds and add table to panels
-        scrollPane.setBounds(10,35,580,400);
+        scrollPane.setBounds(0, 50,560,383);
         pnlTransacHistory.add(scrollPane);
         
         btnLogTransac.addActionListener(this);
