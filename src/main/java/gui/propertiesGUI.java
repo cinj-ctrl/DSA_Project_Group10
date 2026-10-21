@@ -32,7 +32,7 @@ public class propertiesGUI extends JPanel implements ActionListener{
    private JTable regTable;
    private DefaultTableModel tmodel;
    private JScrollPane scrollpane;
-   private LinkedList <Object> linkedlist;
+   private LinkedList <Object> lkdlist;
    private String[] column= {"Property ID","Location","Price","Status"};
    
        
@@ -45,7 +45,7 @@ public class propertiesGUI extends JPanel implements ActionListener{
         setLayout(null);
         
         tmodel = new DefaultTableModel(column, 0);
-        linkedlist = new LinkedList();
+        lkdlist = new LinkedList();
         
         panelLeft = new JPanel();
         panelLeft.setLayout(null);
