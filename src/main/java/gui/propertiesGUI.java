@@ -12,7 +12,10 @@ package gui;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.LinkedList;
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 /**
  *
  * @author jobelle
@@ -27,10 +30,12 @@ public class propertiesGUI extends JPanel implements ActionListener{
    private JTextField txtID, txtloc, txtprice, txtSearch;
    private JComboBox<String> cbStatus, cbSearchBy;
    private JTable regTable;
-   private static final String [] columnNames = {"Property ID","Location","Price","Status"};
-   private static final String [] statusArray = {"Available","Pending","Sold"};
-   private static final String [] searchArray ={};
-    
+   private DefaultTableModel tmodel;
+   private JScrollPane scrollpane;
+   private LinkedList <Object> linkedlist;
+   private String[] column= {"Property ID","Location","Price","Status"};
+   
+       
 
     
     
@@ -39,18 +44,22 @@ public class propertiesGUI extends JPanel implements ActionListener{
         setSize(1000, 600);
         setLayout(null);
         
+        tmodel = new DefaultTableModel(column, 0);
+        linkedlist = new LinkedList();
+        
         panelLeft = new JPanel();
         panelLeft.setLayout(null);
-        panelLeft.setBounds(5, 60, 400, 480);
+        panelLeft.setBounds(5, 0, 400, 600);
         panelLeft.setBackground(Color.white);
         add(panelLeft);
         
         panRight = new JPanel();
         panRight.setLayout(null);
-        panRight.setBounds(420, 60, 560, 480);
+        panRight.setBounds(420, 0, 560, 600);
         panRight.setBackground(Color.white);
         add(panRight);
         
+        //Left panel
         propertyDetail = new JLabel("Property Details");
         propertyDetail.setBounds(5, 5, 100, 50);
         panelLeft.add(propertyDetail);
@@ -82,8 +91,9 @@ public class propertiesGUI extends JPanel implements ActionListener{
         Status = new JLabel("Status:");
         Status.setBounds(20, 250, 100, 50);
         panelLeft.add(Status);
+        String[] statusOpt = {"Available","Pending","Sold"};
         
-        cbStatus = new JComboBox<>(statusArray);
+        cbStatus = new JComboBox<>(statusOpt);
         cbStatus.setBounds(170, 265, 200, 20);
         panelLeft.add(cbStatus);
         
@@ -100,33 +110,38 @@ public class propertiesGUI extends JPanel implements ActionListener{
         panelLeft.add(btnDelete);
         
         
-         
+         //Right panel
         PropertyReg = new JLabel("Property Registry");
         PropertyReg.setBounds(5, 5, 100, 50);
         panRight.add(PropertyReg);
         
         searchBy = new JLabel("Search By:");
-        searchBy.setBounds(5, 20, 100, 50);
+        searchBy.setBounds(5, 30, 100, 50);
         panRight.add(searchBy);
         
-        cbSearchBy = new JComboBox<>(searchArray);
-        cbSearchBy.setBounds(70, 38, 100, 20);
+        cbSearchBy = new JComboBox<>();
+        cbSearchBy.setBounds(70, 45, 100, 20);
         panRight.add(cbSearchBy);
         
         txtSearch = new JTextField();
-        txtSearch.setBounds(180, 38, 150, 20);
+        txtSearch.setBounds(180, 45, 150, 20);
         panRight.add(txtSearch);
         
         btnSearch = new JButton("Seach");
-        btnSearch.setBounds(330, 38, 70, 20);
+        btnSearch.setBounds(330, 45, 70, 20);
         panRight.add(btnSearch);
         
         
+        //Table
+        regTable = new JTable (tmodel);
+        scrollpane = new JScrollPane(regTable);
+        regTable.getTableHeader().setReorderingAllowed(false);
+        regTable.getTableHeader().setResizingAllowed(false);
+        scrollpane.setBounds(0, 70, 560, 600);
+        panRight.add(scrollpane);
         
-        regTable = new JTable ();
-        regTable.setBounds(5, 70, 550, 300);
-        regTable.setBackground(Color.white);
-        panRight.add(regTable);
+        
+        
         
         
         
@@ -143,8 +158,51 @@ public class propertiesGUI extends JPanel implements ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent e) {
-       
-        
+       if (e.getSource()== btnAdd){
+           String propertyID = txtID.getText().trim();
+           String Location = txtloc.getText().trim();
+           String Price = txtprice.getText().trim();
+           String Status = cbStatus.getSelectedItem().toString();
+           if (propertyID.isEmpty()||Location.isEmpty()||Price.isEmpty()){
+               JOptionPane.showMessageDialog(this, "Please Fill Property Details", "Error", JOptionPane.ERROR_MESSAGE);
+           }else{
+               tmodel.addRow(new Object[]{propertyID,Location,Price,Status});
+                txtID.setText("");
+                txtloc.setText("");
+                txtprice.setText("");
+                cbStatus.setSelectedIndex(0);
+           }
+           
+       }
+       else if (e.getSource()==btnDelete){
+           int selectedRow = regTable.getSelectedRow();
+           if(selectedRow==-1){
+               JOptionPane.showMessageDialog(this, "Please Select A Property To Delete", "Error", JOptionPane.ERROR_MESSAGE);
+           }else{
+               tmodel.removeRow(selectedRow);
+           }
+       }
+       else if(e.getSource()==btnUpdate){
+           int selectedRow = regTable.getSelectedRow();
+           if(selectedRow==-1){
+               JOptionPane.showMessageDialog(this, "Please Select A Property To Update", "Error", JOptionPane.ERROR_MESSAGE);
+           }
+           String propertyID = txtID.getText().trim();
+           String Location = txtloc.getText().trim();
+           String Price = txtprice.getText().trim();
+           String Status = cbStatus.getSelectedItem().toString();
+           if (propertyID.isEmpty()||Location.isEmpty()||Price.isEmpty()){
+               JOptionPane.showMessageDialog(this, "Please Fill All Property Details FIrst", "Error", JOptionPane.ERROR_MESSAGE);
+       }
+        tmodel.setValueAt(propertyID, selectedRow, 0);
+        tmodel.setValueAt(Location, selectedRow, 1);
+        tmodel.setValueAt(Price, selectedRow, 2);
+        tmodel.setValueAt(Status, selectedRow, 3);
+        txtID.setText("");
+                txtloc.setText("");
+                txtprice.setText("");
+                cbStatus.setSelectedIndex(0);
+       }
     }
     
 }
