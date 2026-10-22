@@ -2,97 +2,167 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package gui;
+package com.mycompany.dsa_group10_realestate;
 
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Arrays;
+import java.util.LinkedList;
 import javax.swing.JPanel;
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author cassandra
  */
-public class Client extends JPanel {
+public class Client extends JPanel implements ActionListener{
     
     private JPanel pnlClientForm, pnlClientTable;
     private JLabel lblClientTitle, lblClientID, lblClientName, lblContactInfo, lblPropertiesOwned, lblTableTitle;
     private JTextField txfClientID, txfClientName, txfContactInfo, txfPropertiesOwned;
-    private JButton btnAddClient;
+    private JButton btnAddClient, btnUpdateClient, btnDeleteClient, btnSearchClient;
     private JTable tblClientRecords;
+    private JComboBox<String> cbSearchCllient;
+    private JScrollPane scrollpane;
+    private DefaultTableModel tableModel;
+    private LinkedList<Object> linkedlist;
+    
+    private static final String[] columnNames = {"Client ID", "Name", "Contact Info", "Properties Owned"};
+    private static final String[] searchArray = {"Client ID", "Name"};
     
     public Client() {
-        setBounds(0, 0, 1000, 600);
+        setSize(1000, 600);
         setLayout(null);
         
-//        add(pnlClientForm);
-//        add(pnlClientTable);
-        
-        
+        linkedlist = new LinkedList<>();
+        tableModel = new DefaultTableModel(columnNames, 0);
+       
         //L panels
         pnlClientForm = new JPanel();
         pnlClientForm.setLayout(null);
-        pnlClientForm.setBounds(10, 75, 310, 450);
+        pnlClientForm.setBounds(5, 60, 400, 480);
         pnlClientForm.setBackground(Color.white);
-        pnlClientForm.setVisible(true);
         add(pnlClientForm);
         
         //R panels
         pnlClientTable = new JPanel();
         pnlClientTable.setLayout(null);
-        pnlClientTable.setBounds(330, 75, 655, 450);
+        pnlClientTable.setBounds(420, 60, 560, 480);
         pnlClientTable.setBackground(Color.white);
-        pnlClientTable.setVisible(true);
         add(pnlClientTable);
         
         //components
         //L panels Labels
-        lblClientTitle = new JLabel("Manage Client");
-        lblClientTitle.setBounds(10, 10, 150, 25);
-        add(lblClientTitle);
+        lblClientTitle = new JLabel("Client Details");
+        lblClientTitle.setBounds(5, 5, 150, 30);
+        lblClientTitle.add(lblClientTitle);
         
         lblClientID = new JLabel("Client ID");
-        lblClientID.setBounds(10, 70, 100, 25);
-        add(lblClientID);
+        lblClientID.setBounds(20, 70, 100, 30);
+        lblClientID.add(lblClientID);
         
         lblClientName = new JLabel("Name");
         lblClientName.setBounds(10, 120, 100, 25);
-        add(lblClientName);
+        lblClientName.add(lblClientName);
         
         lblContactInfo = new JLabel("Contact Info");
         lblContactInfo.setBounds(10, 170, 100, 25);
-        add(lblContactInfo);
+        lblContactInfo.add(lblContactInfo);
         
         lblPropertiesOwned = new JLabel("Properties Owned");
         lblPropertiesOwned.setBounds(10, 220, 130, 25);
-        add(lblPropertiesOwned);
+        lblPropertiesOwned.add(lblPropertiesOwned);
                 
         //L panels TextF
         txfClientID = new JTextField();
         txfClientID.setBounds(140, 70, 150, 25);
-        add(txfClientID);
+        txfClientID.add(txfClientID);
         
         txfClientName = new JTextField();
         txfClientName.setBounds(140, 120, 150, 25);
-        add(txfClientName);
+        txfClientName.add(txfClientName);
         
         txfContactInfo = new JTextField();
         txfContactInfo.setBounds(140, 170, 150, 25);
-        add(txfContactInfo);
+        txfContactInfo.add(txfContactInfo);
          
         txfPropertiesOwned = new JTextField();
         txfPropertiesOwned.setBounds(140, 220, 150, 25);
-        add(txfPropertiesOwned);
+        txfPropertiesOwned.add(txfPropertiesOwned);
         
         //Button
         btnAddClient = new JButton("Add Client");
         btnAddClient.setBounds(10, 280, 280, 30);
-        add(btnAddClient);
+        btnAddClient.addActionListener(this);
+        btnAddClient.add(btnAddClient);
+        
+        btnUpdateClient = new JButton("Update Client");
+        btnUpdateClient.setBounds(190, 280, 170, 30);
+        btnUpdateClient.addActionListener(this);
+        btnUpdateClient.add(btnUpdateClient);
+        
+        btnDeleteClient = new JButton("Delete Client");
+        btnDeleteClient.setBounds(10, 320, 350, 30);
+        btnDeleteClient.addActionListener(this);
+        btnDeleteClient.add(btnDeleteClient);
+        
+        //right panel
+        lblTableTitle = new JLabel("Client Records");
+        lblTableTitle.setBounds(10, 10, 150, 25);
+        lblTableTitle.add(lblTableTitle);
+        
+        btnSearchClient = new JButton("Search");
+        btnSearchClient.setBounds(200, 10, 100, 25);
+        btnSearchClient.addActionListener(this);
+        pnlClientTable.add(btnSearchClient);
         
         //Panel Table
-        tblClientRecords = new JTable();
-        tblClientRecords.setBounds(10, 45, 635, 390);
-        add(tblClientRecords);
-    
+        tblClientRecords = new JTable(tableModel);
+        tblClientRecords.setEnabled(true);
+        tblClientRecords.getTableHeader().setReorderingAllowed(false);
+        tblClientRecords.getTableHeader().setResizingAllowed(false);
+        
+        scrollpane = new JScrollPane(tblClientRecords);
+        scrollpane.setBounds(10, 45,540, 420);
+        pnlClientTable.add(scrollpane); 
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == btnAddClient) {
+            String id = txfClientID.getText().trim();
+            String name = txfClientName.getText().trim();
+            String contact = txfContactInfo.getText().trim();
+            String properties = txfPropertiesOwned.getText().trim();
+            
+            if (!id.isEmpty()&& !name.isEmpty() && !contact.isEmpty() && !properties.isEmpty()) {
+                Object[] row = {id, name, contact, properties};
+                tableModel.addRow(row);
+                linkedlist.add(Arrays.toString(row));
+                
+                txfClientID.setText("");
+                txfClientName.setText("");
+                txfContactInfo.setText("");
+                txfPropertiesOwned.setText("");
+                
+                JOptionPane.showMessageDialog(this, "Client added successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+            }else{
+                JOptionPane.showMessageDialog(this, "Please complete alll fields", "Error", JOptionPane.ERROR_MESSAGE );      
+            }
+        }
+        
+        else if (e.getSource() == btnDeleteClient) {
+            int selectedRow = tblClientRecords.getSelectedRow();
+            if (selectedRow != -1) {
+                tableModel.removeRow(selectedRow);
+                JOptionPane.showMessageDialog(this, "Client delete successfully1", "Success", JOptionPane.INFORMATION_MESSAGE);
+            }else{
+                JOptionPane.showMessageDialog(this, "Please select a client from the table to delete", "Error", JOptionPane.ERROR_MESSAGE);
+                
+            }
+        }
         
     }
     
