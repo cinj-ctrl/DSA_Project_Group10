@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.mycompany.dsa_group10_realestate;
+package gui;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -57,61 +57,61 @@ public class Client extends JPanel implements ActionListener{
         //L panels Labels
         lblClientTitle = new JLabel("Client Details");
         lblClientTitle.setBounds(5, 5, 150, 30);
-        lblClientTitle.add(lblClientTitle);
+        pnlClientForm.add(lblClientTitle);
         
         lblClientID = new JLabel("Client ID");
-        lblClientID.setBounds(20, 70, 100, 30);
-        lblClientID.add(lblClientID);
+        lblClientID.setBounds(10, 70, 100, 30);
+        pnlClientForm.add(lblClientID);
         
         lblClientName = new JLabel("Name");
         lblClientName.setBounds(10, 120, 100, 25);
-        lblClientName.add(lblClientName);
+        pnlClientForm.add(lblClientName);
         
         lblContactInfo = new JLabel("Contact Info");
         lblContactInfo.setBounds(10, 170, 100, 25);
-        lblContactInfo.add(lblContactInfo);
+        pnlClientForm.add(lblContactInfo);
         
         lblPropertiesOwned = new JLabel("Properties Owned");
         lblPropertiesOwned.setBounds(10, 220, 130, 25);
-        lblPropertiesOwned.add(lblPropertiesOwned);
+        pnlClientForm.add(lblPropertiesOwned);
                 
         //L panels TextF
         txfClientID = new JTextField();
         txfClientID.setBounds(140, 70, 150, 25);
-        txfClientID.add(txfClientID);
+        pnlClientForm.add(txfClientID);
         
         txfClientName = new JTextField();
         txfClientName.setBounds(140, 120, 150, 25);
-        txfClientName.add(txfClientName);
+        pnlClientForm.add(txfClientName);
         
         txfContactInfo = new JTextField();
         txfContactInfo.setBounds(140, 170, 150, 25);
-        txfContactInfo.add(txfContactInfo);
+        pnlClientForm.add(txfContactInfo);
          
         txfPropertiesOwned = new JTextField();
         txfPropertiesOwned.setBounds(140, 220, 150, 25);
-        txfPropertiesOwned.add(txfPropertiesOwned);
+        pnlClientForm.add(txfPropertiesOwned);
         
         //Button
         btnAddClient = new JButton("Add Client");
         btnAddClient.setBounds(10, 280, 280, 30);
         btnAddClient.addActionListener(this);
-        btnAddClient.add(btnAddClient);
+        pnlClientForm.add(btnAddClient);
         
         btnUpdateClient = new JButton("Update Client");
         btnUpdateClient.setBounds(190, 280, 170, 30);
         btnUpdateClient.addActionListener(this);
-        btnUpdateClient.add(btnUpdateClient);
+        pnlClientForm.add(btnUpdateClient);
         
         btnDeleteClient = new JButton("Delete Client");
         btnDeleteClient.setBounds(10, 320, 350, 30);
         btnDeleteClient.addActionListener(this);
-        btnDeleteClient.add(btnDeleteClient);
+        pnlClientForm.add(btnDeleteClient);
         
         //right panel
         lblTableTitle = new JLabel("Client Records");
         lblTableTitle.setBounds(10, 10, 150, 25);
-        lblTableTitle.add(lblTableTitle);
+        pnlClientTable.add(lblTableTitle);
         
         btnSearchClient = new JButton("Search");
         btnSearchClient.setBounds(200, 10, 100, 25);
