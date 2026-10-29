@@ -42,14 +42,14 @@ public class Client extends JPanel implements ActionListener{
         //L panels
         pnlClientForm = new JPanel();
         pnlClientForm.setLayout(null);
-        pnlClientForm.setBounds(5, 60, 400, 480);
+        pnlClientForm.setBounds(5, 0, 400, 480);
         pnlClientForm.setBackground(Color.white);
         add(pnlClientForm);
         
         //R panels
         pnlClientTable = new JPanel();
         pnlClientTable.setLayout(null);
-        pnlClientTable.setBounds(420, 60, 560, 480);
+        pnlClientTable.setBounds(420, 0, 560, 480);
         pnlClientTable.setBackground(Color.white);
         add(pnlClientTable);
         
@@ -125,7 +125,7 @@ public class Client extends JPanel implements ActionListener{
         tblClientRecords.getTableHeader().setResizingAllowed(false);
         
         scrollpane = new JScrollPane(tblClientRecords);
-        scrollpane.setBounds(10, 45,540, 420);
+        scrollpane.setBounds(10, 45, 540, 420);
         pnlClientTable.add(scrollpane); 
     }
 
