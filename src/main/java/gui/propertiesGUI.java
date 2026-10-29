@@ -137,7 +137,7 @@ public class propertiesGUI extends JPanel implements ActionListener{
         scrollpane = new JScrollPane(regTable);
         regTable.getTableHeader().setReorderingAllowed(false);
         regTable.getTableHeader().setResizingAllowed(false);
-        scrollpane.setBounds(0, 70, 560, 600);
+        scrollpane.setBounds(10, 70, 540, 420);
         panRight.add(scrollpane);
         
         

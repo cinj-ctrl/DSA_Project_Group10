@@ -51,7 +51,7 @@ public class TransactionPanel extends JPanel implements ActionListener{
         //Left Panel
         pnlLogTransac = new JPanel();
         pnlLogTransac.setLayout(null);
-        pnlLogTransac.setBounds(5, 60, 400, 480);
+        pnlLogTransac.setBounds(5, 0, 400, 480);
         pnlLogTransac.setBackground(Color.white);
         pnlLogTransac.setVisible(true);
         add(pnlLogTransac);
@@ -59,7 +59,7 @@ public class TransactionPanel extends JPanel implements ActionListener{
         //Right Panel
         pnlTransacHistory = new JPanel();
         pnlTransacHistory.setLayout(null);
-        pnlTransacHistory.setBounds(420, 60, 560, 480);
+        pnlTransacHistory.setBounds(420, 0, 560, 480);
         pnlTransacHistory.setBackground(Color.white);
         pnlTransacHistory.setVisible(true);
         add(pnlTransacHistory);
@@ -126,7 +126,7 @@ public class TransactionPanel extends JPanel implements ActionListener{
         tblTransacHistory.getTableHeader().setResizingAllowed(false);
         
             //Bounds and add table to panels
-        scrollPane.setBounds(0, 50,560,383);
+        scrollPane.setBounds(10, 50,540,420);
         pnlTransacHistory.add(scrollPane);
         
         //Adds action listener to button
