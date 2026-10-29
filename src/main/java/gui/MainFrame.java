@@ -12,6 +12,10 @@ import gui.propertiesGUI;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import javax.swing.*;
 
 /**
@@ -29,6 +33,12 @@ public class MainFrame extends JFrame implements ActionListener{
     private JPanel pnlHeader;
     private JPanel defPanel;
     
+    private JPanel pnlLogin;
+    private JLabel lblLoginTitle, lblUsername, lblPassword;
+    private JTextField txtUsername;
+    private JPasswordField txtPassword;
+    private JButton btnLogin;
+    
     propertiesGUI properties = new propertiesGUI();
     TransactionPanel transactionPanel = new TransactionPanel();
     ReportControls rcontrols = new ReportControls();
@@ -41,7 +51,45 @@ public class MainFrame extends JFrame implements ActionListener{
         setLayout(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         
+        initLoginPanel();
         
+    }
+    
+    private void initLoginPanel() {
+        pnlLogin = new JPanel();
+        pnlLogin.setLayout(null);
+        pnlLogin.setBounds(0, 0, 1000, 600);
+
+        lblLoginTitle = new JLabel("System Login");
+        lblLoginTitle.setBounds(430, 150, 150, 30);
+        pnlLogin.add(lblLoginTitle);
+
+        lblUsername = new JLabel("Username:");
+        lblUsername.setBounds(350, 220, 80, 25);
+        pnlLogin.add(lblUsername);
+
+        txtUsername = new JTextField();
+        txtUsername.setBounds(440, 220, 200, 25);
+        pnlLogin.add(txtUsername);
+
+        lblPassword = new JLabel("Password:");
+        lblPassword.setBounds(350, 270, 80, 25);
+        pnlLogin.add(lblPassword);
+
+        txtPassword = new JPasswordField();
+        txtPassword.setBounds(440, 270, 200, 25);
+        pnlLogin.add(txtPassword);
+
+        btnLogin = new JButton("Login");
+        btnLogin.setBounds(450, 330, 100, 35);
+        btnLogin.addActionListener(this);
+        pnlLogin.add(btnLogin);
+
+        add(pnlLogin);
+    }
+    
+    private void initMainDashboard() {
+        setTitle("Real Estate Management System - Dashboard");
         
         pnlHeader = new JPanel();
         pnlHeader.setLayout(null);
@@ -86,11 +134,35 @@ public class MainFrame extends JFrame implements ActionListener{
         
         defPanel = properties;
         add(defPanel);
+        
+        revalidate();
+        repaint();
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        remove(defPanel); 
+        // Handle Login Click
+        if (e.getSource() == btnLogin) {
+            String user = txtUsername.getText().trim();
+            String pass = new String(txtPassword.getPassword()).trim();
+
+            if (user.isEmpty() || pass.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Please fill in all fields.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (authenticate(user, pass)) {
+                remove(pnlLogin); // Remove login screen
+                initMainDashboard(); // Load main window contents
+            } else {
+                JOptionPane.showMessageDialog(this, "Invalid username or password.", "Login Failed", JOptionPane.ERROR_MESSAGE);
+            }
+            return;
+        }
+        
+        if (defPanel != null) {
+            remove(defPanel);
+        }
         
         if (e.getSource() == btnProperties) {
             defPanel = properties;
@@ -107,12 +179,38 @@ public class MainFrame extends JFrame implements ActionListener{
         repaint();
     }
     
+    private boolean authenticate(String username, String password) {
+        String query = "SELECT * FROM users WHERE username = ? AND password = ?";
+        
+        try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/realestate_db", "root", "");
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            
+            pstmt.setString(1, username);
+            pstmt.setString(2, password);
+            
+            try (ResultSet rs = pstmt.executeQuery()) {
+                return rs.next();
+            }
+            
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Database Connection Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            new MainFrame().setVisible(true);
+        });
+    }
+}
+    
 //    public static void main(String[] args) {
 //        SwingUtilities.invokeLater(() -> {
 ////            new MainFrame().setVisible(true);
 //        });
-    }
-
+    
     
     
     
