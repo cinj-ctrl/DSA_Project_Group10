@@ -11,6 +11,7 @@ import java.sql.SQLException;
  * @author Cindrake Josh
  */
 public class DatabaseConnection {
+    //database url
     private static final String URL =
             "jdbc:mysql://localhost:3306/realestate_db";
     
