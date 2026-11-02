@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.time.LocalDate;
 
 /**
  *
@@ -21,6 +22,7 @@ public class TransactionPanel extends JPanel implements ActionListener{
     //GUI components
     private JPanel pnlLogTransac, pnlTransacHistory;
     private JLabel lblLogTransac, lblTransacID, lblPropertyID, lblClientID, lblDate, lblTransacHistory;
+    private JComboBox<String> cmbClientId, cmbPropertyId;
     private JTextField txfTransacID, txfPropertyID, txfClientID, txfDate;
     private JButton btnLogTransac;
     
@@ -82,26 +84,28 @@ public class TransactionPanel extends JPanel implements ActionListener{
         lblClientID.setBounds(20, 200, 100, 50);
         pnlLogTransac.add(lblClientID);
         
-        lblDate = new JLabel("Date (YYYY-MM-DD):");
-        lblDate.setBounds(20, 250, 150, 50);
-        pnlLogTransac.add(lblDate);
+//        lblDate = new JLabel("Date (YYYY-MM-DD):");
+//        lblDate.setBounds(20, 250, 150, 50);
+//        pnlLogTransac.add(lblDate);
         
         //Left Panel Text Fields
         txfTransacID = new JTextField();
         txfTransacID.setBounds(170, 115, 200, 20);
         pnlLogTransac.add(txfTransacID);
         
-        txfPropertyID = new JTextField();
-        txfPropertyID.setBounds(170, 165, 200, 20);
-        pnlLogTransac.add(txfPropertyID);
         
-        txfClientID = new JTextField();
-        txfClientID.setBounds(170, 215, 200, 20);
-        pnlLogTransac.add(txfClientID);
+        //COMBO BOX OPTIONS ARE TEMPORARY UNTIL PROPERTY AND CLIENT DATA CAN BE ACCESSED IS IMPLEMENTED
+        cmbPropertyId = new JComboBox<>(columnNames);
+        cmbPropertyId.setBounds(170, 165, 200, 20);
+        pnlLogTransac.add(cmbPropertyId);
         
-        txfDate = new JTextField();
-        txfDate.setBounds(170, 265, 200, 20);
-        pnlLogTransac.add(txfDate);
+        cmbClientId = new JComboBox<>(columnNames);
+        cmbClientId.setBounds(170, 215, 200, 20);
+        pnlLogTransac.add(cmbClientId);
+        
+//        txfDate = new JTextField();
+//        txfDate.setBounds(170, 265, 200, 20);
+//        pnlLogTransac.add(txfDate);
         
         //Left Panel Button
         btnLogTransac = new JButton("Log Transaction");
@@ -139,31 +143,17 @@ public class TransactionPanel extends JPanel implements ActionListener{
         if(e.getSource() == btnLogTransac){
             
             //Gets value from text fields and turn them into strings
+            
             String transacID = txfTransacID.getText().trim();
-            String propertyID = txfPropertyID.getText().trim();
-            String clientID = txfClientID.getText().trim();
-            String date = txfDate.getText().trim();
+            String propertyID = cmbPropertyId.getSelectedItem().toString();
+            String clientID = cmbClientId.getSelectedItem().toString();
+            String date = LocalDate.now().toString();
             
             //If all the text fields have text then do this:
             if (!transacID.isEmpty() && !propertyID.isEmpty() && !clientID.isEmpty() && !date.isEmpty()){
                 
-                //Gets string from text fields and adds them to row object
-                Object[] row = {transacID, propertyID, clientID, date};
-                
-                //Adds data to DefaultTableModel to be displayed in frontend
-                tableModel.addRow(row);
-                
-                //Adds data to LinkedList to be stores in backend
-                linkedlist.add(Arrays.toString(row));
-                
-                //Clears textFields
-                txfTransacID.setText("");
-                txfPropertyID.setText("");
-                txfClientID.setText("");
-                txfDate.setText("");
-                
-                //Check linked list value FOR DEBUGGING
-                    //System.out.println(linkedlist);
+                //FUNCTION THAT ADDS INPUT TO TABLE
+                logTransaction(transacID, propertyID, clientID, date);
                 
             }
             //If at least ONE text field is empty: display error message:
@@ -174,6 +164,26 @@ public class TransactionPanel extends JPanel implements ActionListener{
     }
     
     
+    public void logTransaction(String transac, String property,String client, String date){
+                
+                //Gets string from text fields and adds them to row object
+                Object[] row = {transac, property, client, date};
+                
+                //Adds data to DefaultTableModel to be displayed in frontend
+                tableModel.addRow(row);
+                
+                //Adds data to LinkedList to be stores in backend
+                linkedlist.add(Arrays.toString(row));
+                
+                //Clears textFields and sets selected index for combo boxes to zero
+                txfTransacID.setText("");
+                cmbClientId.setSelectedIndex(0);
+                cmbPropertyId.setSelectedIndex(0);
+                
+                
+                //Check linked list value FOR DEBUGGING
+                    //System.out.println(linkedlist);
+    }
     
     
 }
