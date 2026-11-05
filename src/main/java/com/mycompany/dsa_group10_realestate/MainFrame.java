@@ -44,24 +44,20 @@ public class MainFrame extends JFrame {
         btnProperties = new JButton("Properties");
         btnProperties.setBounds(500, 15, 100, 40);
         pnlHeader.add(btnProperties);
-        
-        btnProperties = new JButton("Transactions");
-        btnProperties.setBounds(610, 15, 120, 40);
-        pnlHeader.add(btnProperties);
-        
-        btnProperties = new JButton("Clients");
-        btnProperties.setBounds(740, 15, 100, 40);
-        pnlHeader.add(btnProperties);
-        
-        btnProperties = new JButton("Reports");
-        btnProperties.setBounds(850, 15, 100, 40);
-        pnlHeader.add(btnProperties);
-        
-        
+
+        btnTransaction = new JButton("Transactions");
+        btnTransaction.setBounds(610, 15, 120, 40);
+        pnlHeader.add(btnTransaction);
+
+        btnClient = new JButton("Clients");
+        btnClient.setBounds(740, 15, 100, 40);
+        pnlHeader.add(btnClient);
+
+        btnReports = new JButton("Reports");
+        btnReports.setBounds(850, 15, 100, 40);
+        pnlHeader.add(btnReports);
         
     }
-
-    
     
     public static void main(String[] args) {
         MainFrame app = new MainFrame();
