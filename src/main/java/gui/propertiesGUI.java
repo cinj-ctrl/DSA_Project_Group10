@@ -165,7 +165,7 @@ public class propertiesGUI extends JPanel implements ActionListener{
     public void actionPerformed(ActionEvent e) {
        if (e.getSource()== btnAdd){
            try {
-                if (txtID.getText().trim().isEmpty() || txtloc.getText().trim().isEmpty() || txtprice.getText().trim().isEmpty()) {
+                if (propertyID.getText().trim().isEmpty() || Location.getText().trim().isEmpty()) {
                     JOptionPane.showMessageDialog(this, "Please fill required fields.");
                     return;
                 }
@@ -175,7 +175,7 @@ public class propertiesGUI extends JPanel implements ActionListener{
                     Double.parseDouble(txtprice.getText().trim()),
                     cbStatus.getSelectedItem().toString()
                 );
-                //propServ.addProperty(p);
+                
                 
                 tmodel.addRow(new Object[]{
                     txtID.getText().trim(),
@@ -189,6 +189,7 @@ public class propertiesGUI extends JPanel implements ActionListener{
                 txtprice.setText("");
                 cbStatus.setSelectedIndex(0);
                 
+                propServ.addProperty(p);
                 JOptionPane.showMessageDialog(this, "Property added successfully!");
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
@@ -235,6 +236,7 @@ public class propertiesGUI extends JPanel implements ActionListener{
                 txtloc.setText("");
                 txtprice.setText("");
                 cbStatus.setSelectedIndex(0);
+                
            
         JOptionPane.showMessageDialog(this, "Property updated successfully!");
   
