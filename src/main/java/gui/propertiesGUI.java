@@ -8,6 +8,7 @@ package gui;
  *
  * @author jobelle
  */
+ import model.Property;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -159,21 +160,36 @@ public class propertiesGUI extends JPanel implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
        if (e.getSource()== btnAdd){
-           String propertyID = txtID.getText().trim();
-           String Location = txtloc.getText().trim();
-           String Price = txtprice.getText().trim();
-           String Status = cbStatus.getSelectedItem().toString();
-           if (propertyID.isEmpty()||Location.isEmpty()||Price.isEmpty()){
-               JOptionPane.showMessageDialog(this, "Please Fill Property Details", "Error", JOptionPane.ERROR_MESSAGE);
-           }else{
-               tmodel.addRow(new Object[]{propertyID,Location,Price,Status});
+           try {
+                if (txtID.getText().trim().isEmpty() || txtloc.getText().trim().isEmpty() || txtprice.getText().trim().isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Please fill required fields.");
+                    return;
+                }
+                Property p = new Property(
+                    txtID.getText().trim(),
+                    txtloc.getText().trim(),
+                    Double.parseDouble(txtprice.getText().trim()),
+                    cbStatus.getSelectedItem().toString()
+                );
+                
+                tmodel.addRow(new Object[]{
+                    txtID.getText().trim(),
+                    txtloc.getText().trim(),
+                    txtprice.getText().trim(),
+                    cbStatus.getSelectedItem().toString()
+                });
+                
                 txtID.setText("");
                 txtloc.setText("");
                 txtprice.setText("");
                 cbStatus.setSelectedIndex(0);
-           }
-           
+                
+                JOptionPane.showMessageDialog(this, "Property added successfully!");
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
+            }
        }
+
        else if (e.getSource()==btnDelete){
            int selectedRow = regTable.getSelectedRow();
            if(selectedRow==-1){
@@ -186,26 +202,44 @@ public class propertiesGUI extends JPanel implements ActionListener{
            int selectedRow = regTable.getSelectedRow();
            if(selectedRow==-1){
                JOptionPane.showMessageDialog(this, "Please Select A Property To Update", "Error", JOptionPane.ERROR_MESSAGE);
+               return;
            }
-           String propertyID = txtID.getText().trim();
-           String Location = txtloc.getText().trim();
-           String Price = txtprice.getText().trim();
-           String Status = cbStatus.getSelectedItem().toString();
-           if (propertyID.isEmpty()||Location.isEmpty()||Price.isEmpty()){
+           try{
+           if (txtID.getText().trim().isEmpty() || txtloc.getText().trim().isEmpty() || txtprice.getText().trim().isEmpty()) {
                JOptionPane.showMessageDialog(this, "Please Fill All Property Details FIrst", "Error", JOptionPane.ERROR_MESSAGE);
        }
-        tmodel.setValueAt(propertyID, selectedRow, 0);
-        tmodel.setValueAt(Location, selectedRow, 1);
-        tmodel.setValueAt(Price, selectedRow, 2);
-        tmodel.setValueAt(Status, selectedRow, 3);
-        txtID.setText("");
+            Property p = new Property(
+                    txtID.getText().trim(),
+                    txtloc.getText().trim(),
+                    Double.parseDouble(txtprice.getText().trim()),
+                    cbStatus.getSelectedItem().toString()
+                );
+        tmodel.setValueAt(txtID.getText().trim(), selectedRow, 0);
+        tmodel.setValueAt(txtloc.getText().trim(), selectedRow, 1);
+        tmodel.setValueAt(txtprice.getText().trim(), selectedRow, 2);
+        tmodel.setValueAt(cbStatus.getSelectedItem().toString(), selectedRow, 3);
+        
+                txtID.setText("");
                 txtloc.setText("");
                 txtprice.setText("");
                 cbStatus.setSelectedIndex(0);
+           
+        JOptionPane.showMessageDialog(this, "Property updated successfully!");
+  
+                } catch (NumberFormatException ex) {
+        JOptionPane.showMessageDialog(this, "Error: Price must be a valid number.", "Error", JOptionPane.ERROR_MESSAGE);
+                } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
+
+                }
        }
     }
-    
 }
-
+            
+                
+    
     
 
+
+
+                
