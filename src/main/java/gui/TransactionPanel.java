@@ -12,6 +12,9 @@ import java.util.LinkedList;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.time.LocalDate;
+import java.util.List;
+import model.Transaction;
+import service.transactionService;
 
 /**
  *
@@ -33,6 +36,7 @@ public class TransactionPanel extends JPanel implements ActionListener{
     
     //Backend data to be used in database
     private LinkedList<Object> linkedlist;
+    private transactionService transacService;
     
     //Name for table column
     private String[] columnNames= {"Transaction ID","Property ID","Client ID","Date"};
@@ -42,6 +46,8 @@ public class TransactionPanel extends JPanel implements ActionListener{
         //Sets bounds as main frame bounds
         setBounds(0,0,1000,600);
         setLayout(null);
+        
+        this.transacService = new transactionService();
         
         //Table model to be displayed to user via scrollPane
         tableModel = new DefaultTableModel(columnNames,0);
@@ -136,6 +142,8 @@ public class TransactionPanel extends JPanel implements ActionListener{
         //Adds action listener to button
         btnLogTransac.addActionListener(this);
         
+        loadDataTable();
+        
     }
 
     @Override
@@ -143,6 +151,7 @@ public class TransactionPanel extends JPanel implements ActionListener{
         if(e.getSource() == btnLogTransac){
             
             //Gets value from text fields and turn them into strings
+            
             
             String transacID = txfTransacID.getText().trim();
             String propertyID = cmbPropertyId.getSelectedItem().toString();
@@ -163,9 +172,42 @@ public class TransactionPanel extends JPanel implements ActionListener{
         }
     }
     
+    public void loadDataTable(){
+        tableModel.setRowCount(0);
+        //cmbClientId.removeAllItems();
+        //cmbPropertyId.removeAllItems();
+        
+        try{
+            List<Transaction> transacList = transacService.getAllTransactions();
+            for(Transaction t : transacList){
+                tableModel.addRow(new Object[]{t.getTransactionId(),t.getPropertyId(),t.getClientId(),t.getDate()});
+            }
+            
+            //USE WHEN CLIENT AND PROPERTY IS SET UP
+            /*
+            List<Client> clients = clientService.getAllClients();
+            for(Client c : clients){
+                cmbClientId.addItem(c.getClientId);
+            }
+            
+            List<Property> properties = propertyService.getAllProperties();
+            for(Property p : properties){
+                cmbClientId.addItem(p.getClientId);
+            }
+            */
+            
+        }catch(Exception ex){
+            JOptionPane.showMessageDialog(this, "Error occured in processing transaction. Please try again. "+ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
     
     public void logTransaction(String transac, String property,String client, String date){
+               
+        try{
                 
+                Transaction transacObj = new Transaction(transac, property, client, date);
+                transacService.addTransaction(transacObj);
+
                 //Gets string from text fields and adds them to row object
                 Object[] row = {transac, property, client, date};
                 
@@ -183,6 +225,14 @@ public class TransactionPanel extends JPanel implements ActionListener{
                 
                 //Check linked list value FOR DEBUGGING
                     //System.out.println(linkedlist);
+
+                
+
+                JOptionPane.showMessageDialog(this, "Transaction success!");
+                    
+             } catch(Exception ex){
+                 JOptionPane.showMessageDialog(this, "Error occured in processing transaction. Please try again. "+ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+             }
     }
     
     
