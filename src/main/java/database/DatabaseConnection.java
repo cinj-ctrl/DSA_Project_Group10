@@ -13,7 +13,7 @@ import java.sql.SQLException;
 public class DatabaseConnection {
     //database
     private static final String URL =
-            "jdbc:mysql://localhost:3306/realestate_db";
+            "jdbc:mysql://localhost:3306/real_estate_db";
     
     private static final String USER = "root";
     private static final String PASSWORD = "";
