@@ -4,13 +4,11 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.LinkedList;
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
+import java.util.List;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import model.Property;
+import service.propertyServices;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -24,16 +22,21 @@ import javax.swing.JTextArea;
 public class ReportControls extends JPanel implements ActionListener{
     
     private JPanel pnlControls, pnlSummary;
-    private JLabel lblMetrics;
+    private JLabel lblMetrics, statsLabel;;
     private JComboBox<String> cbSorting;
+    private JTable table;
+    private DefaultTableModel tableModel;
     private JButton btnGenerateReport;
     private JTextArea txtSummary;
     private JScrollPane scrollPane;
     private LinkedList<Object> linkedlist;
+    private propertyServices properties;
+    
     
     public ReportControls(){
         setLayout(null);
         setBackground(Color.white);
+        this.properties = new propertyServices();
         
         linkedlist = new LinkedList<>();
         
@@ -47,6 +50,11 @@ public class ReportControls extends JPanel implements ActionListener{
         lblMetrics = new JLabel("Metrics / Sorting:");
         lblMetrics.setBounds(20, 25, 130, 30);
         pnlControls.add(lblMetrics);
+        
+        statsLabel = new JLabel("Generating valuation statistics...");
+        statsLabel.setBounds(20, 360, 885, 30);
+        statsLabel.setFont(statsLabel.getFont().deriveFont(14f));
+        add(statsLabel);
         
         String[] sortingOptions = {
             "Sort by Price (High to Low)",
@@ -62,38 +70,105 @@ public class ReportControls extends JPanel implements ActionListener{
         btnGenerateReport.setBounds(420, 27, 150, 25);
         pnlControls.add(btnGenerateReport);
         
-        pnlSummary = new JPanel();
-        pnlSummary.setLayout(null);
-        pnlSummary.setBounds(15, 115, 955, 400);
-        pnlSummary.setBackground(Color.white);
-        pnlSummary.setBorder(BorderFactory.createTitledBorder("Analytics Summary"));
-        add(pnlSummary);
+//        pnlSummary = new JPanel();
+//        pnlSummary.setLayout(null);
+//        pnlSummary.setBounds(15, 115, 955, 400);
+//        pnlSummary.setBackground(Color.white);
+//        pnlSummary.setBorder(BorderFactory.createTitledBorder("Analytics Summary"));
+//        add(pnlSummary);
         
-        txtSummary = new JTextArea();
-        txtSummary.setEditable(false);
-        txtSummary.setLineWrap(true);
-        txtSummary.setWrapStyleWord(true);
+//        txtSummary = new JTextArea();
+//        txtSummary.setEditable(false);
+//        txtSummary.setLineWrap(true);
+//        txtSummary.setWrapStyleWord(true);
+//        
+//        scrollPane = new JScrollPane(txtSummary);
+//        scrollPane.setBounds(10, 25, 930, 360);
+//        pnlSummary.add(scrollPane);
         
-        scrollPane = new JScrollPane(txtSummary);
-        scrollPane.setBounds(10, 25, 930, 360);
-        pnlSummary.add(scrollPane);
+        String[] columns = {"Property ID", "Location", "Price ($)", "Status"};
+        tableModel = new DefaultTableModel(columns, 0);
+        table = new JTable(tableModel);
+        JScrollPane scrollPane = new JScrollPane(table);
+        scrollPane.setBounds(15, 115, 955, 400);
+        add(scrollPane);
         
         btnGenerateReport.addActionListener(this);
+        loadReportData();
         
     }
+    
+    
 
     @Override
     public void actionPerformed(ActionEvent e) {
         
-        if (e.getSource() == btnGenerateReport){
-            String selectedSorting = cbSorting.getSelectedItem().toString();
-            
-            txtSummary.setText("");
-            txtSummary.append("REAL ESTATE ANALYTICS SUMMARY\n");
-            txtSummary.append("==============================\n");
-            txtSummary.append("Selected Option" + selectedSorting + "\n\n");
-            txtSummary.append("Report Controls are working. \n");
-            txtSummary.append("Actual property data integration is still pending. \n");
+        try {
+            List<Property> list = properties.getAllProperties();
+
+//            if (e.getSource() == priceAscButton) {
+//                PropertyQuickSort.sort(list, true);
+//                updateTableWithList(list);
+//                JOptionPane.showMessageDialog(this, "Report sorted by Price: Low to High.");
+//            } else if (e.getSource() == priceDescButton) {
+//                PropertyQuickSort.sort(list, false);
+//                updateTableWithList(list);
+//                JOptionPane.showMessageDialog(this, "Report sorted by Price: High to Low.");
+//            } else if (e.getSource() == locationSortButton) {
+//                list.sort(Comparator.comparing(Property::getLocation));
+//                updateTableWithList(list);
+//                JOptionPane.showMessageDialog(this, "Report sorted alphabetically by Location.");
+//            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Sorting error: " + ex.getMessage());
+        }
+    }
+
+    private void updateTableWithList(List<Property> list) {
+        tableModel.setRowCount(0);
+        double totalValuation = 0;
+        int availableCount = 0;
+
+        for (Property p : list) {
+            tableModel.addRow(new Object[]{
+                p.getPropertyId(),
+                p.getLocation(),
+                p.getPrice(),
+                p.getStatus()
+            });
+            totalValuation += p.getPrice();
+            if ("Available".equalsIgnoreCase(p.getStatus())) {
+                availableCount++;
+            }
+        }
+        statsLabel.setText(String.format("Executive Summary — Total Properties: %d | Available: %d | Total Portfolio Value: $%,.2f",
+                list.size(), availableCount, totalValuation));
+    }
+    
+    public void loadReportData() {
+        tableModel.setRowCount(0);
+        try {
+            List<Property> list = properties.getAllProperties();
+            double totalValuation = 0;
+            int availableCount = 0;
+
+            for (Property p : list) {
+                tableModel.addRow(new Object[]{
+                    p.getPropertyId(),
+                    p.getLocation(),
+                    p.getPrice(),
+                    p.getStatus()
+                });
+                totalValuation += p.getPrice();
+                if ("Available".equalsIgnoreCase(p.getStatus())) {
+                    availableCount++;
+                }
+            }
+
+            statsLabel.setText(String.format("Executive Summary — Total Properties: %d | Available: %d | Total Portfolio Value: $%,.2f",
+                    list.size(), availableCount, totalValuation));
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error generating report data: " + ex.getMessage());
         }
     }
 }
