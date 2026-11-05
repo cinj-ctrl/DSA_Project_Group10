@@ -8,12 +8,14 @@ package gui;
  *
  * @author jobelle
  */
- import model.Property;
+import model.Property;
+import service.propertyServices;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.LinkedList;
+import java.util.List;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
@@ -34,6 +36,7 @@ public class propertiesGUI extends JPanel implements ActionListener{
    private DefaultTableModel tmodel;
    private JScrollPane scrollpane;
    private LinkedList <Object> lkdlist;
+   private propertyServices propServ;
    private String[] column= {"Property ID","Location","Price","Status"};
    
        
@@ -45,6 +48,7 @@ public class propertiesGUI extends JPanel implements ActionListener{
         setSize(1000, 600);
         setLayout(null);
         
+        this.propServ = new propertyServices();
         tmodel = new DefaultTableModel(column, 0);
         lkdlist = new LinkedList();
         
@@ -154,7 +158,7 @@ public class propertiesGUI extends JPanel implements ActionListener{
         btnUpdate.addActionListener(this);
 
         
-        
+        loadDataTable();
     }
 
     @Override
@@ -171,6 +175,7 @@ public class propertiesGUI extends JPanel implements ActionListener{
                     Double.parseDouble(txtprice.getText().trim()),
                     cbStatus.getSelectedItem().toString()
                 );
+                //propServ.addProperty(p);
                 
                 tmodel.addRow(new Object[]{
                     txtID.getText().trim(),
@@ -194,8 +199,14 @@ public class propertiesGUI extends JPanel implements ActionListener{
            int selectedRow = regTable.getSelectedRow();
            if(selectedRow==-1){
                JOptionPane.showMessageDialog(this, "Please Select A Property To Delete", "Error", JOptionPane.ERROR_MESSAGE);
-           }else{
-               tmodel.removeRow(selectedRow);
+               return;
+           }try{
+              String p = tmodel.getValueAt(selectedRow, 0).toString();
+              propServ.deleteProperty(p);
+              tmodel.removeRow(selectedRow);
+               JOptionPane.showMessageDialog(this, "Property deleted.");
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
            }
        }
        else if(e.getSource()==btnUpdate){
@@ -214,6 +225,7 @@ public class propertiesGUI extends JPanel implements ActionListener{
                     Double.parseDouble(txtprice.getText().trim()),
                     cbStatus.getSelectedItem().toString()
                 );
+            propServ.updateProperty(p);
         tmodel.setValueAt(txtID.getText().trim(), selectedRow, 0);
         tmodel.setValueAt(txtloc.getText().trim(), selectedRow, 1);
         tmodel.setValueAt(txtprice.getText().trim(), selectedRow, 2);
@@ -234,6 +246,20 @@ public class propertiesGUI extends JPanel implements ActionListener{
                 }
        }
     }
+    public void loadDataTable(){
+        tmodel.setRowCount(0);
+     
+        try{
+            List<Property> propertyList = propServ.getAllProperties();
+            for(Property p : propertyList){
+             tmodel.addRow(new Object[]{p.getPropertyId(), p.getLocation(), p.getPrice(), p.getStatus()});   
+            }
+
+        }catch(Exception ex){
+            JOptionPane.showMessageDialog(this, "Error occured in processing transaction. Please try again. "+ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
 }
             
                 
