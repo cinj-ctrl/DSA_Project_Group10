@@ -29,7 +29,7 @@ public class TransactionPanel extends JPanel implements ActionListener{
     private JLabel lblLogTransac, lblTransacID, lblPropertyID, lblClientID, lblDate, lblTransacHistory;
     private JComboBox<String> cmbClientId, cmbPropertyId;
     private JTextField txfTransacID, txfPropertyID, txfClientID, txfDate;
-    private JButton btnLogTransac;
+    private JButton btnLogTransac, btnRefreshPage;
     
     //All three are important for showing frontend data
     private DefaultTableModel tableModel;
@@ -122,6 +122,10 @@ public class TransactionPanel extends JPanel implements ActionListener{
         btnLogTransac.setBounds(50, 330, 280, 30);
         pnlLogTransac.add(btnLogTransac);
         
+        btnRefreshPage = new JButton("Refresh Page");
+        btnRefreshPage.setBounds(50, 380, 280, 30);
+        pnlLogTransac.add(btnRefreshPage);
+        
         //Right Panel Label
         lblTransacHistory = new JLabel("Transaction History");
         lblTransacHistory.setBounds(5, 5, 150, 50);
@@ -145,6 +149,7 @@ public class TransactionPanel extends JPanel implements ActionListener{
         
         //Adds action listener to button
         btnLogTransac.addActionListener(this);
+        btnRefreshPage.addActionListener(this);
         
         loadDataTable();
         
@@ -154,6 +159,7 @@ public class TransactionPanel extends JPanel implements ActionListener{
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == btnLogTransac){
             
+            try{
             //Gets value from text fields and turn them into strings
             
             
@@ -165,21 +171,31 @@ public class TransactionPanel extends JPanel implements ActionListener{
             //If all the text fields have text then do this:
             if (!transacID.isEmpty() && !propertyID.isEmpty() && !clientID.isEmpty() && !date.isEmpty()){
                 
+                
                 //FUNCTION THAT ADDS INPUT TO TABLE
                 logTransaction(transacID, propertyID, clientID, date);
+                
+                    
                 
             }
             //If at least ONE text field is empty: display error message:
             else{
                 JOptionPane.showMessageDialog(this, "Please complete all fields", "Error", JOptionPane.ERROR_MESSAGE);
-            }
+                }
+            } catch (NullPointerException nullEx){
+                    JOptionPane.showMessageDialog(this, "Please complete all fields", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+        }
+        
+        else if(e.getSource() == btnRefreshPage){
+            loadDataTable();
         }
     }
     
     public void loadDataTable(){
         tableModel.setRowCount(0);
-        //cmbClientId.removeAllItems();
-        //cmbPropertyId.removeAllItems();
+        cmbClientId.removeAllItems();
+        cmbPropertyId.removeAllItems();
         
         try{
             List<Transaction> transacList = transacService.getAllTransactions();
