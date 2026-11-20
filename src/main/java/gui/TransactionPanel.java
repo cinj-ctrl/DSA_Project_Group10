@@ -13,7 +13,9 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.time.LocalDate;
 import java.util.List;
+import model.Property;
 import model.Transaction;
+import service.propertyServices;
 import service.transactionService;
 
 /**
@@ -37,6 +39,7 @@ public class TransactionPanel extends JPanel implements ActionListener{
     //Backend data to be used in database
     private LinkedList<Object> linkedlist;
     private transactionService transacService;
+    private propertyServices propService;
     
     //Name for table column
     private String[] columnNames= {"Transaction ID","Property ID","Client ID","Date"};
@@ -48,6 +51,7 @@ public class TransactionPanel extends JPanel implements ActionListener{
         setLayout(null);
         
         this.transacService = new transactionService();
+        this.propService = new propertyServices();
         
         //Table model to be displayed to user via scrollPane
         tableModel = new DefaultTableModel(columnNames,0);
@@ -101,7 +105,7 @@ public class TransactionPanel extends JPanel implements ActionListener{
         
         
         //COMBO BOX OPTIONS ARE TEMPORARY UNTIL PROPERTY AND CLIENT DATA CAN BE ACCESSED IS IMPLEMENTED
-        cmbPropertyId = new JComboBox<>(columnNames);
+        cmbPropertyId = new JComboBox<>();
         cmbPropertyId.setBounds(170, 165, 200, 20);
         pnlLogTransac.add(cmbPropertyId);
         
@@ -189,12 +193,16 @@ public class TransactionPanel extends JPanel implements ActionListener{
             for(Client c : clients){
                 cmbClientId.addItem(c.getClientId);
             }
-            
-            List<Property> properties = propertyService.getAllProperties();
-            for(Property p : properties){
-                cmbClientId.addItem(p.getClientId);
-            }
             */
+            
+            
+            List<Property> properties = propService.getAllProperties();
+            for(Property p : properties){
+                if ("Available".equalsIgnoreCase(p.getStatus())) {
+                    cmbPropertyId.addItem(p.getPropertyId() + " - " + p.getLocation() + " ($" + p.getPrice() + ")");
+                }
+            }
+            
             
         }catch(Exception ex){
             JOptionPane.showMessageDialog(this, "Error occured in processing transaction. Please try again. "+ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
