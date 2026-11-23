@@ -43,7 +43,7 @@ public class propertyServices {
         }
     }
      public void updateProperty(Property p) throws SQLException {
-        String query = "UPDATE properties location=?, price=?, status=? WHERE propertyId=?";
+        String query = "UPDATE properties SET location=?, price=?, status=? WHERE propertyId=?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.setString(2, p.getLocation());
