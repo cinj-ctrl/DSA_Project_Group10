@@ -1,8 +1,10 @@
 package gui;
 
+import ds.PropertyQuickSort;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import javax.swing.*;
@@ -105,20 +107,24 @@ public class ReportControls extends JPanel implements ActionListener{
         
         try {
             List<Property> list = properties.getAllProperties();
-
-//            if (e.getSource() == priceAscButton) {
-//                PropertyQuickSort.sort(list, true);
-//                updateTableWithList(list);
-//                JOptionPane.showMessageDialog(this, "Report sorted by Price: Low to High.");
-//            } else if (e.getSource() == priceDescButton) {
-//                PropertyQuickSort.sort(list, false);
-//                updateTableWithList(list);
-//                JOptionPane.showMessageDialog(this, "Report sorted by Price: High to Low.");
-//            } else if (e.getSource() == locationSortButton) {
-//                list.sort(Comparator.comparing(Property::getLocation));
-//                updateTableWithList(list);
-//                JOptionPane.showMessageDialog(this, "Report sorted alphabetically by Location.");
-//            }
+            String selectedSorting = cbSorting.getSelectedItem().toString().trim();
+            
+            if (e.getSource() == btnGenerateReport){
+                if (selectedSorting.equalsIgnoreCase("Sort by Price (High to Low)")) {
+                PropertyQuickSort.sort(list, false);
+                updateTableWithList(list);
+                JOptionPane.showMessageDialog(this, "Report sorted by Price: Low to High.");
+            } else if (selectedSorting.equalsIgnoreCase("Sort by Price (Low to High)")) {
+                PropertyQuickSort.sort(list, true);
+                updateTableWithList(list);
+                JOptionPane.showMessageDialog(this, "Report sorted by Price: High to Low.");
+            } else if (selectedSorting.equalsIgnoreCase("Sort by Location (A-Z)")) {
+                list.sort(Comparator.comparing(Property::getLocation));
+                updateTableWithList(list);
+                JOptionPane.showMessageDialog(this, "Report sorted alphabetically by Location.");
+            }
+            }
+            
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Sorting error: " + ex.getMessage());
         }
