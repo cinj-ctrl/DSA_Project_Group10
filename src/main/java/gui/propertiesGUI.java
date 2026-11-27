@@ -19,6 +19,8 @@ import java.util.List;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 /**
  *
  * @author jobelle
@@ -145,6 +147,20 @@ public class propertiesGUI extends JPanel implements ActionListener{
         scrollpane.setBounds(10, 70, 540, 420);
         panRight.add(scrollpane);
         
+        regTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int row = regTable.getSelectedRow();
+                if (row != -1) {
+                    txtID.setText(tmodel.getValueAt(row, 0).toString());
+                    
+                    txtloc.setText(tmodel.getValueAt(row, 1).toString());
+                    txtprice.setText(tmodel.getValueAt(row, 2).toString());
+                    cbStatus.setSelectedItem(tmodel.getValueAt(row, 3).toString());
+                }
+            }
+        });
+
    
         btnAdd.addActionListener(this);
         btnDelete.addActionListener(this);
@@ -198,6 +214,10 @@ public class propertiesGUI extends JPanel implements ActionListener{
               String p = tmodel.getValueAt(selectedRow, 0).toString();
               propServ.deleteProperty(p);
               tmodel.removeRow(selectedRow);
+                txtID.setText("");
+                txtloc.setText("");
+                txtprice.setText("");
+                cbStatus.setSelectedIndex(0);
                JOptionPane.showMessageDialog(this, "Property deleted.");
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
@@ -212,6 +232,7 @@ public class propertiesGUI extends JPanel implements ActionListener{
            try{
            if (txtID.getText().trim().isEmpty() || txtloc.getText().trim().isEmpty() || txtprice.getText().trim().isEmpty()) {
                JOptionPane.showMessageDialog(this, "Please Fill All Property Details FIrst", "Error", JOptionPane.ERROR_MESSAGE);
+               return;
        }
             Property p = new Property(
                     txtID.getText().trim(),

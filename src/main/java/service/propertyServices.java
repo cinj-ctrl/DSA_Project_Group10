@@ -42,17 +42,22 @@ public class propertyServices {
             
         }
     }
-     public void updateProperty(Property p) throws SQLException {               //update an existing proprty using its ID to find it
-        String query = "UPDATE properties SET location=?, price=?, status=? WHERE propertyId=?";
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(query)) {
-            pstmt.setString(2, p.getLocation());
-            pstmt.setDouble(3, p.getPrice());
-            pstmt.setString(4, p.getStatus());
-            pstmt.setString(1, p.getPropertyId());
-            pstmt.executeUpdate();
+    
+    
+    public void updateProperty(Property p) throws SQLException {
+    String query = "UPDATE properties SET location=?, price=?, status=? WHERE propertyid=?";
+    try (Connection conn = DatabaseConnection.getConnection();
+         PreparedStatement pstmt = conn.prepareStatement(query)) {
+        pstmt.setString(1, p.getLocation());
+        pstmt.setDouble(2, p.getPrice());
+        pstmt.setString(3, p.getStatus());
+        pstmt.setString(4, p.getPropertyId());
+        int rowsAffected = pstmt.executeUpdate();
+        if (rowsAffected == 0) {
+            throw new SQLException("No property found with ID: " + p.getPropertyId());
         }
     }
+}
      public void deleteProperty(String propertyId) throws SQLException {          //remove a property into the database using its ID
         String query = "DELETE FROM properties WHERE propertyId=?";
         try (Connection conn = DatabaseConnection.getConnection();
