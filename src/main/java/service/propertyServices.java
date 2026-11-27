@@ -13,13 +13,13 @@ import java.util.List;
  * @author jobelle
  */
 public class propertyServices {
-    public List<Property> getAllProperties() throws SQLException {
+    public List<Property> getAllProperties() throws SQLException {   //get every property from the database and return them as a list
         List<Property> list = new ArrayList<>();
         String query = "SELECT * FROM properties";
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnection.getConnection();     //connect to database, run query and read result
                 Statement stmt = conn.createStatement();
                 ResultSet rs = stmt.executeQuery(query)) {
-            while (rs.next()){
+            while (rs.next()){                                       //convert each database row into a property object and add to list
                 list.add(new Property(
                     rs.getString("propertyId"),
                     rs.getString("location"),
@@ -30,7 +30,7 @@ public class propertyServices {
         }
         return list;
 }
-    public void addProperty(Property p) throws SQLException {
+    public void addProperty(Property p) throws SQLException {                //save a new property into the database
         String query = "INSERT INTO properties VALUES (?, ?, ?, ?)";
         try (Connection conn = DatabaseConnection.getConnection();
                 PreparedStatement pstmt = conn.prepareStatement(query)) {
@@ -42,8 +42,8 @@ public class propertyServices {
             
         }
     }
-     public void updateProperty(Property p) throws SQLException {
-        String query = "UPDATE properties location=?, price=?, status=? WHERE propertyId=?";
+     public void updateProperty(Property p) throws SQLException {               //update an existing proprty using its ID to find it
+        String query = "UPDATE properties SET location=?, price=?, status=? WHERE propertyId=?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.setString(2, p.getLocation());
@@ -53,7 +53,7 @@ public class propertyServices {
             pstmt.executeUpdate();
         }
     }
-     public void deleteProperty(String propertyId) throws SQLException {
+     public void deleteProperty(String propertyId) throws SQLException {          //remove a property into the database using its ID
         String query = "DELETE FROM properties WHERE propertyId=?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {

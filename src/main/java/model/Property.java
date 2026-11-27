@@ -11,19 +11,21 @@ package model;
     
     //CONSTRUCTOR
     
-        public class Property {
+        public class Property {    //store the property info
     private String propertyId;
     private String location;
     private double price;
     private String status;
 
-    public Property(String propertyId, String location, double price, String status) {
+    public Property(String propertyId, String location, double price, String status) {    //constructor create new property with all details set in one call
         this.propertyId = propertyId;
         this.location = location;
         this.price = price;
         this.status = status;
     }
-
+     
+    
+    //GETTERS AND SETTERS (RETURN THE DATA AND CHANGE THE DATA)
     public String getPropertyId() { return propertyId; }
     public void setPropertyId(String propertyId) { this.propertyId = propertyId; }
 
@@ -40,5 +42,5 @@ package model;
 
     
     
-    //GETTERS AND SETTERS
+    
 
