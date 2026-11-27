@@ -10,6 +10,7 @@ package gui;
  */
 import model.Property;
 import service.propertyServices;
+import ds.PropertyBST;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -29,7 +30,7 @@ public class propertiesGUI extends JPanel implements ActionListener{
     
    
    // UI components
-   private JButton btnAdd, btnUpdate, btnDelete, btnSearch;
+   private JButton btnAdd, btnUpdate, btnDelete, btnSearch, btnSort;
    private JLabel panLabel, propertyDetail, propertyID, Location, Price, Status, PropertyReg, searchBy;
    private JPanel panelLeft, panRight;
    private JTextField txtID, txtloc, txtprice, txtSearch;
@@ -122,13 +123,13 @@ public class propertiesGUI extends JPanel implements ActionListener{
         PropertyReg.setBounds(5, 5, 100, 50);
         panRight.add(PropertyReg);
         
-        searchBy = new JLabel("Search By:");
+        /*searchBy = new JLabel("Search By:");
         searchBy.setBounds(5, 30, 100, 50);
-        panRight.add(searchBy);
+        panRight.add(searchBy);*/
         
-        cbSearchBy = new JComboBox<>();
-        cbSearchBy.setBounds(70, 45, 100, 20);
-        panRight.add(cbSearchBy);
+        btnSort = new JButton("Sort");
+        btnSort.setBounds(70, 45, 100, 20);
+        panRight.add(btnSort);
         
         txtSearch = new JTextField();
         txtSearch.setBounds(180, 45, 150, 20);
@@ -165,6 +166,8 @@ public class propertiesGUI extends JPanel implements ActionListener{
         btnAdd.addActionListener(this);
         btnDelete.addActionListener(this);
         btnUpdate.addActionListener(this);
+        btnSearch.addActionListener(this);
+        btnSort.addActionListener(this);
 
         
         loadDataTable();
@@ -260,7 +263,22 @@ public class propertiesGUI extends JPanel implements ActionListener{
                 JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
 
                 }
-       }
+       } 
+        else if (e.getSource() == btnSort) {
+            try {
+                List<Property> list = propServ.getAllProperties();
+                PropertyBST bst = new PropertyBST();
+                for (Property p : list) bst.insert(p);
+                List<Property> sorted = bst.inOrderTraversal();
+                tmodel.setRowCount(0);
+                for (Property p : sorted) {
+                    tmodel.addRow(new Object[]{p.getPropertyId(), p.getLocation(), p.getPrice(), p.getStatus()});
+                }
+                JOptionPane.showMessageDialog(this, "Properties sorted via Binary Search Tree (BST) by price!");
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Error sorting: " + ex.getMessage());
+            }
+    }
     }
     public void loadDataTable(){
         tmodel.setRowCount(0);
