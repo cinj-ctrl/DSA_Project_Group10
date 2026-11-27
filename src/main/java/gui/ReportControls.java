@@ -51,10 +51,10 @@ public class ReportControls extends JPanel implements ActionListener{
         lblMetrics.setBounds(20, 25, 130, 30);
         pnlControls.add(lblMetrics);
         
-        statsLabel = new JLabel("Generating valuation statistics...");
-        statsLabel.setBounds(20, 360, 885, 30);
+        statsLabel = new JLabel("Generating Valuation Statistics...");
+        statsLabel.setBounds(20, 65, 885, 30);
         statsLabel.setFont(statsLabel.getFont().deriveFont(14f));
-        add(statsLabel);
+        pnlControls.add(statsLabel);
         
         String[] sortingOptions = {
             "Sort by Price (High to Low)",
@@ -89,8 +89,8 @@ public class ReportControls extends JPanel implements ActionListener{
         String[] columns = {"Property ID", "Location", "Price ($)", "Status"};
         tableModel = new DefaultTableModel(columns, 0);
         table = new JTable(tableModel);
-        JScrollPane scrollPane = new JScrollPane(table);
-        scrollPane.setBounds(15, 115, 955, 400);
+        scrollPane = new JScrollPane(table);
+        scrollPane.setBounds(15, 140, 955, 280);
         add(scrollPane);
         
         btnGenerateReport.addActionListener(this);
