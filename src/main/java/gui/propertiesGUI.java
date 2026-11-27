@@ -26,7 +26,7 @@ import javax.swing.table.TableModel;
 public class propertiesGUI extends JPanel implements ActionListener{
     
    
-   // JTextField;
+   // UI components
    private JButton btnAdd, btnUpdate, btnDelete, btnSearch;
    private JLabel panLabel, propertyDetail, propertyID, Location, Price, Status, PropertyReg, searchBy;
    private JPanel panelLeft, panRight;
@@ -145,14 +145,7 @@ public class propertiesGUI extends JPanel implements ActionListener{
         scrollpane.setBounds(10, 70, 540, 420);
         panRight.add(scrollpane);
         
-        
-        
-        
-        
-        
-        
-        
-        
+   
         btnAdd.addActionListener(this);
         btnDelete.addActionListener(this);
         btnUpdate.addActionListener(this);
